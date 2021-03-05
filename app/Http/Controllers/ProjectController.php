@@ -54,11 +54,16 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $project->lists;
         $user = auth()->userOrFail(); 
+        $todosCount = 0;
+        foreach ($project->lists as $list) {
+            $list->todos;
+            $todosCount += $list->todos->count();
+        }   
+        $project->todos_count = $todosCount;
         if($user->id == $project->user_id){
             return response()->json([
-                'project' => $project
+                'project' => $project,
             ]);
         }else {
             return response()->json([

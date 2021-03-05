@@ -13,12 +13,20 @@ class ListTodos extends Model
         'created_at',
         'updated_at',
     ];
+    
+    protected $fillable = [
+        'name',
+        'description',
+        'project_id',
+        'created_at', 
+        'updated_at'
+    ];
 
     public function project(){
         return $this->belongsTo(Project::class);
     }
 
     public function todos(){
-        return $this->hasMany(Todo::class);
+        return $this->hasMany(Todo::class,'list_id','id');
     }
 }

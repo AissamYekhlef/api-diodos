@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ListTodosController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TodoController;
 use App\Models\ListTodos;
 use App\Models\Project;
 use App\Models\Todo;
@@ -46,11 +48,23 @@ Route::group([
 
 ], function () {
 
-Route::get('/projects', [ProjectController::class, 'index']);
-Route::get('/projects/{project}', [ProjectController::class, 'show']);
-Route::post('/projects', [ProjectController::class, 'store']);
-Route::put('/projects/{project}', [ProjectController::class, 'update']);
-Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
+    // projects Endpoint
+    Route::get('/projects', [ProjectController::class, 'index']);
+    Route::get('/projects/{project}', [ProjectController::class, 'show']);
+    Route::post('/projects', [ProjectController::class, 'store']);
+    Route::put('/projects/{project}', [ProjectController::class, 'update']);
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy']);
+
+    // listTodos Endpoint
+    Route::post('/projects/{project}/lists', [ListTodosController::class, 'store']);
+    Route::put('/projects/{project}/lists/{list}', [ListTodosController::class, 'update']);
+    Route::delete('/projects/{project}/lists/{list}', [ListTodosController::class, 'destroy']);
+
+    // Todos Endpoint
+    Route::post('/projects/{project}/lists/{list}/todos', [TodoController::class, 'store']);
+    Route::put('/projects/{project}/lists/{list}/todos/{todo}', [TodoController::class, 'update']);
+    Route::delete('/projects/{project}/lists/{list}/todos/{todo}', [TodoController::class, 'destroy']);
+
 
 });
 

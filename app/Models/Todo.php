@@ -15,6 +15,12 @@ class Todo extends Model
         'updated_at',
     ];
 
+    protected $fillable = [
+        'title',
+        'completed',
+        'list_id',
+    ];
+
     public function list(){
         return $this->belongsTo(ListTodos::class);
     }

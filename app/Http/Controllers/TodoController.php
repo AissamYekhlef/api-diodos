@@ -17,15 +17,6 @@ class TodoController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -35,7 +26,18 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $todo = Todo::create([
+            'title' => $request->title,
+            'completed' => false,
+            'list_id' => $request->list,
+        ]);
+
+        return response()->json([
+            'success' => 'true',
+            'message' => 'Todo Created',
+            'todo' => $todo,
+        ]);
+
     }
 
     /**
@@ -49,16 +51,6 @@ class TodoController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Todo $todo)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -67,9 +59,32 @@ class TodoController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo)
+    public function update(Request $request)
     {
-        //
+        $todo = Todo::find($request->todo);
+
+        if($todo){
+            $todo->title = $request->title  ? $request->title : $todo->title;
+            // return response($request->completed);
+            if($request->completed == "false"){
+                $todo->completed = 0;
+            }else{
+                $todo->completed =  1;
+            }
+            $todo->save();
+    
+            return response()->json([
+                'success' => 'true',
+                'message' => 'Todo Updated',
+                'todo' => $todo,
+            ]);
+        }else{
+            return response()->json([
+                'success' => 'false',
+                'message' => 'Not Found Todo',
+            ], 404);
+        }
+
     }
 
     /**
@@ -78,8 +93,25 @@ class TodoController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Todo $todo)
+    public function destroy(Request $request)
     {
-        //
+
+        $todo = Todo::find($request->todo);
+
+        if($todo){
+            $todo->delete();
+            return response()->json([
+                'success' => 'true',
+                'message' => 'Todo Deleted',
+                'todo' => $todo,
+            ]);
+        }else{
+            return response()->json([
+                'success' => 'false',
+                'message' => 'Not Found Todo',
+            ], 404);
+        }
+
+        return $request->todo;
     }
 }
